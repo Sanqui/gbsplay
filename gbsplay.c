@@ -22,6 +22,9 @@ static const char vols[5] = " -=#%";
 /* global variables */
 static struct termios ots;
 
+static long quit = 0;
+static long pause_mode = 0;
+
 /* default values */
 static long redraw = false;
 
