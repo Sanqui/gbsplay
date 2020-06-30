@@ -1,28 +1,31 @@
 language: c
-os:
-  - linux
-  - osx
-env:
-  - CONFIGURE_FLAGS=
-  - CONFIGURE_FLAGS=--enable-sharedlibgbs
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      env: CONFIGURE_FLAGS="--with-xgbsplay"
+    - os: linux
+      compiler: gcc
+      env: CONFIGURE_FLAGS="--with-xgbsplay --enable-sharedlibgbs"
+    - os: linux
+      compiler: clang
+      env: CONFIGURE_FLAGS="--with-xgbsplay"
+    - os: linux
+      compiler: clang
+      env: CONFIGURE_FLAGS="--with-xgbsplay --enable-sharedlibgbs"
+    - os: osx
+      compiler: clang
+      env: CONFIGURE_FLAGS=
 script:
   - ./configure && make && make test
   - make distclean
   - make dist
-matrix:
-  exclude:
-    - os: osx
-      compiler: gcc
-    - os: osx
-      env: CONFIGURE_FLAGS=--enable-sharedlibgbs
 addons:
   apt:
     packages:
       - libasound2-dev
       - libpulse-dev
       - libaudio-dev
-compiler:
-  - clang
-  - gcc
+      - libx11-dev
 after_success:
   - bash <(curl -s https://codecov.io/bash)
